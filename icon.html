@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>キャラ設定シート</title>
+<title>Prompton.io アイコンプラン詳細指定シート</title>
 
 <!-- ===== STYLE ===== -->
 <style>
@@ -23,6 +23,7 @@ body{
   background:var(--bg);
   color:var(--text);
   line-height:1.6;
+  padding-bottom:4em;
 }
 
 /* Sticky header */
@@ -33,13 +34,18 @@ body{
 }
 #remaining{color:var(--primary);}
 
+/* Intro */
+.intro{padding:1.6em 1em 0;margin:0 auto;max-width:800px;}
+.intro a{color:var(--primary);text-decoration:none;font-weight:700;}
+.intro a:hover{text-decoration:underline;}
+
 /* Sections & questions */
 .section{
   margin:2em 0 1em;text-align:center;font-size:1.3em;font-weight:700;color:var(--primary);
 }
 .question{
   background:var(--card);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);
-  padding:1em;margin:.7em 0;
+  padding:1em;margin:.7em 0;max-width:800px;margin-left:auto;margin-right:auto;
 }
 .question p{margin:.2em 0 .8em;font-weight:700;}
 .question label{margin-right:1em;cursor:pointer;}
@@ -60,7 +66,7 @@ body{
 /* Summary */
 #summary{
   white-space:pre-wrap;background:var(--card);border-radius:8px;
-  padding:1.2em;margin:2em 0 4em;box-shadow:0 2px 6px rgba(0,0,0,.1);
+  padding:1.2em;margin:2em auto;box-shadow:0 2px 6px rgba(0,0,0,.1);max-width:800px;
 }
 .error{color:var(--danger);font-weight:700;}
 .hidden{display:none;}
@@ -71,11 +77,17 @@ body{
 <!-- ===== TOP BAR ===== -->
 <div id="topbar">残ポイント：<span id="remaining">20</span> / 20 pt</div>
 
+<!-- ===== INTRO ===== -->
+<div class="intro">
+  <p>
+    Prompton.ioの
+    <a href="https://prompton.io/calendula/plans/kkE2aoK6d5RV5Oc68MGS8" target="_blank">アイコンプラン</a>
+    の詳細指定シートです。各指定にポイントが割り振られており、最大20pt分まで指定可能です。最後に出力された結果をコピーして、要望欄に貼り付けてください。文字数が不足する場合はスクリーンショットをアップロードしてください。
+  </p>
+</div>
+
 <form id="quiz">
 
-<!-- =====================================================================
-     SECTION: 描画スタイル
-===================================================================== -->
 <h2 class="section">描画スタイル</h2>
 
 <div class="question" data-section="描画スタイル">
@@ -84,7 +96,6 @@ body{
   <label><input type="radio" name="style" value="リアルテクスチャ"     data-pt="2">リアルテクスチャ</label>
   <label><input type="radio" name="style" value="フラットデザイン"     data-pt="2">フラットデザイン</label>
 </div>
-
 <!-- =====================================================================
      SECTION: 髪
 ===================================================================== -->
@@ -353,8 +364,16 @@ body{
 </div>
 </form>
 
-<!-- ===== SUMMARY AREA ===== -->
+<!-- ========== SUMMARY ========== -->
 <div id="summary" class="hidden"></div>
+
+<!-- ========== ACTION BUTTONS (下配置) ========== -->
+<div class="actions">
+  <button type="button" id="showSummary" class="btn">結果を表示</button>
+  <button type="button" id="copySummary" class="btn">結果をコピー</button>
+</div>
+
+</form>
 
 <!-- ===== SCRIPT ===== -->
 <script>
@@ -399,15 +418,16 @@ function buildResult(){
   const used = checked.reduce((s,r)=>s+Number(r.dataset.pt),0);
   if(used > maxPoints){return {ok:false,msg:'ERROR: ポイント上限を超過しています'};}
 
-  // 結果行生成（指定しないは非表示）
+  // 結果行生成
   const lines=[];
   checked.forEach(r=>{
-    if(r.value==='指定しない') return;
-    const q = r.closest('.question');
-    const title = q.querySelector('p').innerText.replace(/^@/,'').trim();
+    const q  = r.closest('.question');
+    const sec= q.dataset.section;
     const tb = q.querySelector('.textbox');
-    const txt = tb?tb.value.trim():'';
-    lines.push(`${title}: ${r.value}${txt? ' / '+txt:''}`);
+    const txt= tb?tb.value.trim():'';
+    if(r.value==='指定しない' && !txt) return;          // skip
+    const ans = txt || r.value;
+    lines.push(`${sec}: ${ans}`);
   });
   lines.push('----');lines.push(`合計ポイント: ${used} / ${maxPoints}`);
   return {ok:true,msg:lines.join('\n')};
@@ -419,6 +439,7 @@ document.getElementById('showSummary').addEventListener('click', ()=>{
   summaryEl.textContent=res.msg;
   summaryEl.classList.toggle('error',!res.ok);
   summaryEl.classList.remove('hidden');
+  window.scrollTo({top:summaryEl.offsetTop-80,behavior:'smooth'});
 });
 
 /* --- コピー --- */
@@ -435,6 +456,7 @@ document.getElementById('copySummary').addEventListener('click', ()=>{
     .catch(()=>alert('コピーに失敗しました'));
   summaryEl.textContent=res.msg;
   summaryEl.classList.remove('error','hidden');
+  window.scrollTo({top:summaryEl.offsetTop-80,behavior:'smooth'});
 });
 
 /* --- 初期残ポイント --- */
