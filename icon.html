@@ -5,87 +5,45 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Prompton.io アイコンプラン詳細指定シート</title>
 
-<!-- ===== STYLE ===== -->
+<!-- ===== CryptoJS（AES用） ===== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-:root{
-  --primary:#6366f1;
-  --primary-light:#818cf8;
-  --danger:#ef4444;
-  --bg:#f7f8fc;
-  --card:#ffffff;
-  --text:#333;
-}
+:root{--primary:#6366f1;--primary-light:#818cf8;--danger:#ef4444;--bg:#f7f8fc;--card:#ffffff;--text:#333;}
 *{box-sizing:border-box;}
-body{
-  margin:0;
-  font-family:"Roboto",sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.6;
-  padding-bottom:4em;
-}
-
-/* Sticky header */
-#topbar{
-  position:sticky;top:0;z-index:1000;
-  background:var(--card);box-shadow:0 2px 4px rgba(0,0,0,.08);
-  padding:.6em 1em;display:flex;justify-content:center;font-weight:700;
-}
+body{margin:0;font-family:"Roboto",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding-bottom:4em;}
+#topbar{position:sticky;top:0;z-index:1000;background:var(--card);box-shadow:0 2px 4px rgba(0,0,0,.08);padding:.6em 1em;display:flex;justify-content:center;font-weight:700;}
 #remaining{color:var(--primary);}
-
-/* Intro */
 .intro{padding:1.6em 1em 0;margin:0 auto;max-width:800px;}
-.intro a{color:var(--primary);text-decoration:none;font-weight:700;}
+.intro a{color:var(--primary);font-weight:700;text-decoration:none;}
 .intro a:hover{text-decoration:underline;}
-
-/* Sections & questions */
-.section{
-  margin:2em 0 1em;text-align:center;font-size:1.3em;font-weight:700;color:var(--primary);
-}
-.question{
-  background:var(--card);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);
-  padding:1em;margin:.7em 0;max-width:800px;margin-left:auto;margin-right:auto;
-}
+.section{margin:2em 0 1em;text-align:center;font-size:1.3em;font-weight:700;color:var(--primary);}
+.question{background:var(--card);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:1em;margin:.7em auto;max-width:800px;}
 .question p{margin:.2em 0 .8em;font-weight:700;}
 .question label{margin-right:1em;cursor:pointer;}
 .question input[type=radio]{accent-color:var(--primary);margin-right:.25em;}
-.textbox{
-  display:none;width:100%;margin-top:.6em;padding:.55em .8em;
-  border:1px solid #ccc;border-radius:4px;font-size:1em;
-}
-
-/* Buttons */
-.btn{
-  border:none;border-radius:6px;padding:.65em 1.4em;font-size:1em;font-weight:700;
-  color:#fff;background:var(--primary);cursor:pointer;transition:background .2s;
-}
+.textbox{display:none;width:100%;margin-top:.6em;padding:.55em .8em;border:1px solid #ccc;border-radius:4px;font-size:1em;}
+.btn{border:none;border-radius:6px;padding:.65em 1.4em;font-size:1em;font-weight:700;color:#fff;background:var(--primary);cursor:pointer;transition:background .2s;}
 .btn:hover{background:var(--primary-light);}
 .actions{display:flex;justify-content:center;gap:1em;margin:2em 0;}
-
-/* Summary */
-#summary{
-  white-space:pre-wrap;background:var(--card);border-radius:8px;
-  padding:1.2em;margin:2em auto;box-shadow:0 2px 6px rgba(0,0,0,.1);max-width:800px;
-}
+#summary{white-space:pre-wrap;background:var(--card);border-radius:8px;padding:1.2em;margin:2em auto;box-shadow:0 2px 6px rgba(0,0,0,.1);max-width:800px;word-break:break-all;}
 .error{color:var(--danger);font-weight:700;}
 .hidden{display:none;}
 </style>
 </head>
 <body>
 
-<!-- ===== TOP BAR ===== -->
 <div id="topbar">残ポイント：<span id="remaining">20</span> / 20 pt</div>
 
-<!-- ===== INTRO ===== -->
 <div class="intro">
   <p>
     Prompton.ioの
     <a href="https://prompton.io/calendula/plans/kkE2aoK6d5RV5Oc68MGS8" target="_blank">アイコンプラン</a>
     の詳細指定シートです。<br>
     各指定にポイントが割り振られており、最大20pt分まで指定可能です。<br>
-    最後に出力された結果をコピーして、要望欄に貼り付けてください。<br>
-    文字数が不足する場合はスクリーンショットをアップロードしてください。
+    最後に出力された結果をコピーして要望欄に貼り付けてください。<br>
+    結果テキストは圧縮されていますので、変更を加えないでください。
   </p>
 </div>
 
@@ -363,22 +321,21 @@ body{
 <!-- ========== SUMMARY ========== -->
 <div id="summary" class="hidden"></div>
 
-<!-- ========== ACTION BUTTONS (下配置) ========== -->
 <div class="actions">
   <button type="button" id="showSummary" class="btn">結果を表示</button>
   <button type="button" id="copySummary" class="btn">結果をコピー</button>
 </div>
-
 </form>
 
-<!-- ===== SCRIPT ===== -->
 <script>
+/* ====== 固定値 ====== */
 const maxPoints = 20;
+const AES_KEY   = 'PromptonSecretKey!';   // ← 必要なら変更してください。同じ鍵が復号側にも必要
 const quiz      = document.getElementById('quiz');
 const remainEl  = document.getElementById('remaining');
 const summaryEl = document.getElementById('summary');
 
-/* --- 更新残ポイント --- */
+/* ====== 残ポイント更新 ====== */
 function updateRemaining(){
   const used = [...quiz.querySelectorAll('input[type=radio]:checked')]
                  .reduce((s,r)=>s + Number(r.dataset.pt),0);
@@ -387,75 +344,79 @@ function updateRemaining(){
   remainEl.style.color = remain < 0 ? 'var(--danger)' : 'var(--primary)';
 }
 
-/* --- ラジオ変更処理 --- */
+/* ====== ラジオ変更処理 ====== */
 quiz.addEventListener('change', e=>{
-  const qBox = e.target.closest('.question');
-  if(!qBox) return;
-  const textbox = qBox.querySelector('.textbox');
-  const hideVal = qBox.dataset.hideValue;
-  if(textbox){
-    if(e.target.value === '指定しない' || e.target.dataset.hide || (hideVal && e.target.value === hideVal)){
-      textbox.style.display='none';textbox.value='';
-    }else{textbox.style.display='block';textbox.focus();}
+  const box = e.target.closest('.question');
+  if(!box) return;
+  const tb  = box.querySelector('.textbox');
+  const hv  = box.dataset.hideValue;
+  if(tb){
+    if(e.target.value==='指定しない' || e.target.dataset.hide || (hv && e.target.value===hv)){
+      tb.style.display='none';tb.value='';
+    }else{tb.style.display='block';tb.focus();}
   }
   updateRemaining();
 });
 
-/* --- 結果生成 --- */
-function buildResult(){
-  // 未選択チェック
+/* ====== 結果生成 (プレーンテキスト) ====== */
+function buildPlainText(){
   for(const q of quiz.querySelectorAll('.question')){
     if(!q.querySelector('input[type=radio]:checked')){
       return {ok:false,msg:`ERROR: 未選択の項目があります。（${q.dataset.section}）`};
     }
   }
-  // ポイント計算
-  const checked = [...quiz.querySelectorAll('input[type=radio]:checked')];
-  const used = checked.reduce((s,r)=>s+Number(r.dataset.pt),0);
-  if(used > maxPoints){return {ok:false,msg:'ERROR: ポイント上限を超過しています'};}
+  const checked=[...quiz.querySelectorAll('input[type=radio]:checked')];
+  const used=checked.reduce((s,r)=>s+Number(r.dataset.pt),0);
+  if(used>maxPoints) return {ok:false,msg:'ERROR: ポイント上限を超過しています'};
 
-  // 結果行生成
   const lines=[];
   checked.forEach(r=>{
-    const q  = r.closest('.question');
-    const sec= q.dataset.section;
-    const tb = q.querySelector('.textbox');
-    const txt= tb?tb.value.trim():'';
-    if(r.value==='指定しない' && !txt) return;          // skip
-    const ans = txt || r.value;
-    lines.push(`${sec}: ${ans}`);
+    const sec=r.closest('.question').dataset.section;
+    const tb =r.closest('.question').querySelector('.textbox');
+    const txt=(tb?tb.value.trim():'');
+    if(r.value==='指定しない' && !txt) return;
+    lines.push(`${sec}:${txt||r.value}`);
   });
-  lines.push('----');lines.push(`合計ポイント: ${used} / ${maxPoints}`);
-  return {ok:true,msg:lines.join('\n')};
+  lines.push(`P=${used}`);
+  return {ok:true,msg:lines.join('|')};   // 短縮のため区切りを | に
 }
 
-/* --- 結果ボタン --- */
-document.getElementById('showSummary').addEventListener('click', ()=>{
-  const res = buildResult();
-  summaryEl.textContent=res.msg;
-  summaryEl.classList.toggle('error',!res.ok);
+/* ====== AES 暗号化 ====== */
+function encrypt(text){
+  return CryptoJS.AES.encrypt(text,AES_KEY).toString();
+}
+
+/* ====== ボタン: 結果表示 ====== */
+document.getElementById('showSummary').addEventListener('click',()=>{
+  const res=buildPlainText();
+  if(!res.ok){
+    summaryEl.textContent=res.msg;
+    summaryEl.classList.add('error');
+  }else{
+    summaryEl.textContent=encrypt(res.msg);
+    summaryEl.classList.remove('error');
+  }
   summaryEl.classList.remove('hidden');
   window.scrollTo({top:summaryEl.offsetTop-80,behavior:'smooth'});
 });
 
-/* --- コピー --- */
-document.getElementById('copySummary').addEventListener('click', ()=>{
-  const res = buildResult();
+/* ====== ボタン: コピー ====== */
+document.getElementById('copySummary').addEventListener('click',()=>{
+  const res=buildPlainText();
   if(!res.ok){
     summaryEl.textContent=res.msg;
     summaryEl.classList.add('error');
     summaryEl.classList.remove('hidden');
     return alert('エラーがあるためコピーできません');
   }
-  navigator.clipboard.writeText(res.msg)
-    .then(()=>alert('結果をコピーしました'))
-    .catch(()=>alert('コピーに失敗しました'));
-  summaryEl.textContent=res.msg;
+  const cipher=encrypt(res.msg);
+  summaryEl.textContent=cipher;
   summaryEl.classList.remove('error','hidden');
-  window.scrollTo({top:summaryEl.offsetTop-80,behavior:'smooth'});
+  navigator.clipboard.writeText(cipher)
+          .then(()=>alert('コピーしました！'))
+          .catch(()=>alert('コピーに失敗しました;_;'));
 });
 
-/* --- 初期残ポイント --- */
 updateRemaining();
 </script>
 </body>
