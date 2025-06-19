@@ -7,9 +7,7 @@
 <!-- ========== STYLE ========== -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-:root{
- --p:#6366f1;--pl:#818cf8;--d:#ef4444;--bg:#f7f8fc;--card:#fff;--txt:#333;
-}
+:root{--p:#6366f1;--pl:#818cf8;--d:#ef4444;--bg:#f7f8fc;--card:#fff;--txt:#333;}
 *{box-sizing:border-box;font-family:"Roboto",sans-serif;}
 body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bottom:5em;}
 #top{position:sticky;top:0;z-index:100;background:var(--card);box-shadow:0 2px 4px rgba(0,0,0,.08);padding:.6em 1em;font-weight:700;text-align:center}
@@ -27,7 +25,6 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
 .btn:hover{background:var(--pl)}
 .actions{display:flex;justify-content:center;gap:1em;margin:2em 0}
 #codeOut{white-space:pre-wrap;background:var(--card);border-radius:8px;padding:1.2em;margin:2em auto;box-shadow:0 2px 6px rgba(0,0,0,.1);max-width:860px}
-#code{font-family:Menlo,Consolas,monospace}
 .ok{color:#10b981;font-weight:700}
 .err{color:var(--d);font-weight:700}
 </style>
@@ -40,15 +37,18 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
   <p>
     Prompton.io の
     <a href="https://prompton.io/calendula/plans/kkE2aoK6d5RV5Oc68MGS8" target="_blank">アイコンプラン</a>
-    の詳細指定シートです。各指定にポイントが割り振られており、最大 20 pt まで指定可能です。<br>
-    「圧縮コードコピー」ボタンで 200 文字以内のコードを生成し、要望欄へ貼り付けてください。文字数が不足する場合はスクリーンショットをアップロードしてください。
+    の詳細指定シートです。<br>
+   各指定にポイントが割り振られており、最大 20 pt まで指定可能です。<br>
+    「圧縮コード生成」で生成されたコードをコピーして、要望欄へ貼り付けてください。<br>
+   圧縮コードは手打ち編集などをしないようお願いします。
   </p>
 </div>
 
 <form id="sheet">
 
-<!-- ======================== 質問ブロック全 32 ========================== -->
-<!-- ==== 描画スタイル ==== -->
+<!-- ======================== 質問ブロック（31 問） ======================== -->
+
+<!-- ==== 0. 描画スタイル ==== -->
 <h2 class="section">描画スタイル</h2>
 <div class="q" data-sec="描画スタイル" data-idx="0">
  <p>@描画スタイル指定</p>
@@ -57,15 +57,21 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <label><input type="radio" name="q0" value="フラットデザイン" data-p="2">フラットデザイン</label>
 </div>
 
-<!-- ==== 髪 ==== -->
+<!-- ==== 1. 髪の長さ ==== -->
 <h2 class="section">髪</h2>
 <div class="q" data-sec="髪:長さ" data-idx="1">
  <p>@長さ</p>
- <label><input type="radio" name="q1" value="指定する" data-p="1">指定する</label>
- <label><input type="radio" name="q1" value="指定しない" data-p="0" checked>指定しない</label>
- <input class="tb" maxlength="12" placeholder="ハゲ～ロングまで指定可能">
+ <label><input type="radio" name="q1" value="ハゲ"              data-p="1">ハゲ</label>
+ <label><input type="radio" name="q1" value="ベリーショート"    data-p="1">ベリーショート</label>
+ <label><input type="radio" name="q1" value="ショート"          data-p="1">ショート</label>
+ <label><input type="radio" name="q1" value="ミディアムショート"data-p="1">ミディアムショート</label>
+ <label><input type="radio" name="q1" value="ミディアム"        data-p="1">ミディアム</label>
+ <label><input type="radio" name="q1" value="セミロング"        data-p="1">セミロング</label>
+ <label><input type="radio" name="q1" value="ロング"            data-p="1">ロング</label>
+ <label><input type="radio" name="q1" value="指定しない"        data-p="0" checked>指定しない</label>
 </div>
 
+<!-- ==== 2. 髪型 ==== -->
 <div class="q" data-sec="髪:髪型" data-idx="2">
  <p>@髪型</p>
  <label><input type="radio" name="q2" value="指定する" data-p="2">指定する</label>
@@ -73,6 +79,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <input class="tb" maxlength="12" placeholder="複雑な髪型は失敗することがあります">
 </div>
 
+<!-- ==== 3. 髪の癖 ==== -->
 <div class="q" data-sec="髪:癖" data-idx="3">
  <p>@癖</p>
  <label><input type="radio" name="q3" value="ストレート" data-p="1">ストレート</label>
@@ -82,6 +89,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <label><input type="radio" name="q3" value="指定しない" data-p="0" checked>指定しない</label>
 </div>
 
+<!-- ==== 4. 前髪 ==== -->
 <div class="q" data-sec="髪:前髪" data-idx="4">
  <p>@前髪の形状</p>
  <label><input type="radio" name="q4" value="ぱっつん"     data-p="1">ぱっつん</label>
@@ -92,6 +100,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <label><input type="radio" name="q4" value="指定しない"   data-p="0" checked>指定しない</label>
 </div>
 
+<!-- ==== 5. 髪色 ==== -->
 <div class="q" data-sec="髪:色" data-idx="5">
  <p>@髪色</p>
  <label><input type="radio" name="q5" value="１色"         data-p="1">１色</label>
@@ -102,7 +111,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <input class="tb" maxlength="12" placeholder="２色の場合はメインカラーを先に記入">
 </div>
 
-<!-- ==== 目 ==== -->
+<!-- ==== 6. 目:瞳の色 ==== -->
 <h2 class="section">目</h2>
 <div class="q" data-sec="目:瞳色" data-idx="6" data-hide="虹色の瞳">
  <p>@瞳の色</p>
@@ -113,6 +122,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <input class="tb" maxlength="12" placeholder="オッドアイは左右の指定ができません">
 </div>
 
+<!-- ==== 7. 目:瞳孔 ==== -->
 <div class="q" data-sec="目:瞳孔" data-idx="7">
  <p>@瞳孔の形状</p>
  <label><input type="radio" name="q7" value="星"         data-p="1">星</label>
@@ -121,6 +131,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <label><input type="radio" name="q7" value="指定しない" data-p="0" checked>指定しない</label>
 </div>
 
+<!-- ==== 8. 目:まつ毛色 ==== -->
 <div class="q" data-sec="目:まつ毛色" data-idx="8">
  <p>@まつ毛の色</p>
  <label><input type="radio" name="q8" value="指定する"   data-p="1">指定する</label>
@@ -128,6 +139,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <input class="tb" maxlength="12" placeholder="１色まで">
 </div>
 
+<!-- ==== 9. 目:まつ毛形 ==== -->
 <div class="q" data-sec="目:まつ毛形" data-idx="9">
  <p>@まつ毛の形状</p>
  <label><input type="radio" name="q9"  value="ツリ目"     data-p="1">ツリ目</label>
@@ -137,12 +149,14 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <label><input type="radio" name="q9"  value="指定しない" data-p="0" checked>指定しない</label>
 </div>
 
+<!-- ==== 10. 目:白目 ==== -->
 <div class="q" data-sec="目:白目" data-idx="10">
  <p>@白目</p>
  <label><input type="radio" name="q10" value="黒にする"   data-p="1">黒にする</label>
  <label><input type="radio" name="q10" value="指定しない" data-p="0" checked>指定しない</label>
 </div>
 
+<!-- ==== 11. 目:閉じる ==== -->
 <div class="q" data-sec="目:閉じる" data-idx="11">
  <p>@目を閉じる</p>
  <label><input type="radio" name="q11" value="目を閉じる" data-p="1">目を閉じる</label>
@@ -150,20 +164,20 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <input class="tb" maxlength="12" placeholder="瞳の設定が無効。笑顔閉じ/通常閉じ">
 </div>
 
-<!-- ==== 表情・口 ==== -->
+<!-- ==== 12-16. 表情・口 ==== -->
 <h2 class="section">表情・口</h2>
 <div class="q" data-sec="表情" data-idx="12">
  <p>@表情</p>
- <label><input type="radio" name="q12" value="指定する"   data-p="1">指定する</label>
+ <label><input type="radio" name="q12" value="指定する" data-p="1">指定する</label>
  <label><input type="radio" name="q12" value="指定しない" data-p="0" checked>指定しない</label>
  <input class="tb" maxlength="12" placeholder="表情は１つまで">
 </div>
 
 <div class="q" data-sec="頬染め" data-idx="13">
  <p>@頬染め</p>
- <label><input type="radio" name="q13" value="頬染め有"      data-p="1">頬染め有</label>
+ <label><input type="radio" name="q13" value="頬染め有" data-p="1">頬染め有</label>
  <label><input type="radio" name="q13" value="顔全体を染める" data-p="1">顔全体を染める</label>
- <label><input type="radio" name="q13" value="指定しない"     data-p="0" checked>指定しない</label>
+ <label><input type="radio" name="q13" value="指定しない" data-p="0" checked>指定しない</label>
 </div>
 
 <div class="q" data-sec="口" data-idx="14">
@@ -188,7 +202,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <input class="tb" maxlength="12" placeholder="形状・太さを指定">
 </div>
 
-<!-- ==== 服装 ==== -->
+<!-- ==== 17-23. 服装 ==== -->
 <h2 class="section">服装</h2>
 <div class="q" data-sec="服:種類" data-idx="17">
  <p>@服の種類</p>
@@ -243,7 +257,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <label><input type="radio" name="q23" value="指定しない"     data-p="0" checked>指定しない</label>
 </div>
 
-<!-- ==== 体 ==== -->
+<!-- ==== 24-27. 体 ==== -->
 <h2 class="section">体</h2>
 <div class="q" data-sec="体格" data-idx="24">
  <p>@体格</p>
@@ -277,7 +291,7 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
  <input class="tb" maxlength="12" placeholder="人外肌も可">
 </div>
 
-<!-- ==== その他 ==== -->
+<!-- ==== 28-30. その他 ==== -->
 <h2 class="section">その他</h2>
 <div class="q" data-sec="カメラ" data-idx="28">
  <p>@カメラ</p>
@@ -310,68 +324,61 @@ body{margin:0;background:var(--bg);color:var(--txt);line-height:1.6;padding-bott
 
 <!-- ========== SCRIPT ========== -->
 <script>
-/* ---- 設定 ---- */
 const maxPt=20;
-const CS="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // 36 chars
-/* ---- 要素 ---- */
+const CS="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // 36
 const remain=document.getElementById('remain');
-const out   =document.getElementById('codeOut');
-/* ---- 残ポイント計算 ---- */
-function updateRemain(){
-  let used=0;
-  document.querySelectorAll('.q').forEach(q=>{
-    const r=q.querySelector('input[type=radio]:checked');
-    used+=Number(r.dataset.p);
-  });
-  remain.textContent=maxPt-used;
-  remain.style.color=used>maxPt?'var(--d)':'var(--p)';
+const out=document.getElementById('codeOut');
+
+/* 残ポイント計算 */
+function updRemain(){
+ let used=0;
+ document.querySelectorAll('.q').forEach(q=>{
+   const r=q.querySelector('input[type=radio]:checked');
+   used+=Number(r.dataset.p);
+ });
+ remain.textContent=maxPt-used;
+ remain.style.color=used>maxPt?'var(--d)':'var(--p)';
 }
-/* ---- ラジオ/テキスト入力切替 ---- */
 document.getElementById('sheet').addEventListener('change',e=>{
-  const q=e.target.closest('.q');
-  if(!q)return;
-  const tb=q.querySelector('.tb');
-  const hideVal=q.dataset.hide;
-  if(tb){
-    if(e.target.value==="指定しない"||e.target.dataset.hide||e.target.value===hideVal){tb.style.display='none';tb.value='';}
-    else{tb.style.display='block';tb.focus();}
-  }
-  updateRemain();
+ const q=e.target.closest('.q');if(!q)return;
+ const tb=q.querySelector('.tb');const hide=q.dataset.hide;
+ if(tb){
+   if(e.target.value==="指定しない"||e.target.dataset.hide||e.target.value===hide){tb.style.display='none';tb.value='';}
+   else{tb.style.display='block';tb.focus();}
+ }
+ updRemain();
 });
-updateRemain();
+updRemain();
 
-/* ---- 圧縮コード生成 ---- */
-function buildCode(){
-  let used=0,head="",tailParts=[];
-  const qs=[...document.querySelectorAll('.q')];
-  for(const q of qs){
-    const idx=Number(q.dataset.idx);
-    const r =q.querySelector('input[type=radio]:checked');
-    if(!r)return {err:`質問 ${idx+1} が未選択です`};
-    const p =Number(r.dataset.p);used+=p;
-    if(used>maxPt)return {err:'ポイント上限を超過しています'};
-    const optIdx=[...q.querySelectorAll('input[type=radio]')].indexOf(r);
-    head+=CS[optIdx];
-    const tb=q.querySelector('.tb');if(tb&&tb.value.trim()){tailParts.push(CS[idx]+tb.value.trim());}
-  }
-  const code=tailParts.length?head+":"+tailParts.join(","):head;
-  if(code.length>200)return{err:'200 文字を超えました'};
-  return {code,used};
+/* 圧縮コード */
+function build(){
+ let used=0,head="",tails=[];
+ const qs=[...document.querySelectorAll('.q')];
+ for(const q of qs){
+   const idx=Number(q.dataset.idx);
+   const r=q.querySelector('input[type=radio]:checked');
+   if(!r)return{err:`質問${idx+1}が未選択`};
+   const p=Number(r.dataset.p);used+=p;
+   if(used>maxPt)return{err:'ポイント上限超過'};
+   const optIdx=[...q.querySelectorAll('input[type=radio]')].indexOf(r);
+   head+=CS[optIdx];
+   const tb=q.querySelector('.tb');if(tb&&tb.value.trim())tails.push(CS[idx]+tb.value.trim());
+ }
+ const code=tails.length?head+":"+tails.join(","):head;
+ if(code.length>200)return{err:'200文字超過'};
+ return{code,used};
 }
-
-/* ---- 出力 ---- */
-function showCode(res){
-  out.classList.remove('hidden','ok','err');
-  if(res.err){out.textContent=res.err;out.classList.add('err');return;}
-  out.textContent=`${res.code}\n----\n合計ポイント:${res.used}/${maxPt}`;
-  out.classList.add('ok');
+/* 出力 */
+function show(res){
+ out.classList.remove('hidden','ok','err');
+ if(res.err){out.textContent=res.err;out.classList.add('err');return;}
+ out.textContent=`${res.code}\n----\n合計ポイント:${res.used}/${maxPt}`;out.classList.add('ok');
 }
-/* ---- 生成／コピー ---- */
-document.getElementById('gen').onclick=()=>showCode(buildCode());
+document.getElementById('gen').onclick=()=>show(build());
 document.getElementById('copy').onclick=()=>{
-  const res=buildCode();showCode(res);
-  if(res.err)return;
-  navigator.clipboard.writeText(res.code).then(()=>alert('コピーしました'));
+ const res=build();show(res);
+ if(res.err)return;
+ navigator.clipboard.writeText(res.code).then(()=>alert('コピーしました'));
 };
 </script>
 </body>
